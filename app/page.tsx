@@ -98,7 +98,7 @@ export default function Home() {
           </Accordion>
         </div>
         <div className="h-screen lg:w-3/5 lg:py-0">
-          <img src={img.src} className="object-cover h-full w-full object-[30%]" />
+          <img src={img.src} alt="Students" className="object-cover h-full w-full object-[30%]" />
         </div>
       </section>
       <section className="h-screen w-screen flex flex-col lg:flex-row justify-center items-center align-center lg:mt-0 mt-40">

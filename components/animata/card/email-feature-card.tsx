@@ -98,7 +98,7 @@ const EmailCard = () => {
             type="submit"
             className="mt-4 self-end rounded-full bg-gray-600 p-2 text-white cursor-pointer transition-colors duration-300 hover:bg-green-600"
           >
-            <span role="img" aria-label="send">➤</span>
+            <span role="img" aria-label="send">{"\u27A4"}</span>
           </button>
         </form>
       </div>
