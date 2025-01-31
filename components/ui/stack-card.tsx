@@ -36,7 +36,8 @@ const CARDS = [
     designation: "Full-Stack Developer Trainee",
     content: (
       <p>
-        Internify's training was fantastic! The focus on{" "}
+      Internify&apos;s training was fantastic! The focus on{" "}
+
         <Highlight>hands-on experience</Highlight> really set it apart. I walked away with practical knowledge that I apply every day.
       </p>
     ),
@@ -69,7 +70,7 @@ const CARDS = [
     designation: "Mobile App Developer",
     content: (
       <p>
-        The program's comprehensive approach{" "}
+        The program&apos;s comprehensive approach{" "}
         <Highlight>helped me get a better job</Highlight> as a mobile app developer. The training was totally worth it!
       </p>
     ),

@@ -43,7 +43,7 @@ const EmailCard = () => {
     <div className="group relative w-full max-w-lg rounded-lg p-6 mt-10">
       <div className="relative flex flex-col gap-4 rounded-lg border border-gray-300 bg-white p-6">
         <h2 className="text-xl font-bold">Follow for Updates</h2>
-        <p className="text-base font-light">Fill out the details below and we'll send you an email</p>
+        <p className="text-base font-light">Fill out the details below and we&apos;ll send you an email</p>
 
         <form onSubmit={handleSubmit} className="flex flex-col">
           <div className="flex flex-col mb-4">

@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-let interval: any;
+let interval: NodeJS.Timeout;
+
 
 type Card = {
   id: number;
