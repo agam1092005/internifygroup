@@ -1,7 +1,7 @@
 {
     "version": 2,
     "builds": [
-      { "src": "next.config.mjs", "use": "@vercel/next" }
+      { "src": "next.config.js", "use": "@vercel/next" }
     ],
     "routes": [
       { "src": "/.*", "dest": "/$1" }
@@ -10,4 +10,5 @@
       "sfo1"
     ]
   }
+  
   
