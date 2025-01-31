@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../../app/firebase"; // import firestore
+import { db } from "../../../firebase"; 
 
 const EmailCard = () => {
   const [formData, setFormData] = useState({
