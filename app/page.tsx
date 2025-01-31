@@ -1,101 +1,103 @@
-import Image from "next/image";
+'use client';
+import { AnimatedGridPattern } from "../components/ui/animated-grid-pattern";
+import { AuroraText } from "../components/ui/aurora-text";
+import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
+import img from '/app/students.jpg';
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { AtSign, Command, Eclipse, Zap } from "lucide-react";
 
 export default function Home() {
+  const items = [
+    {
+      id: "1",
+      icon: Command,
+      title: "What makes Internify unique?",
+      content:
+        "Internify focuses on hands-on industrial training in various software fields. We offer real-time projects after module completion, ensuring practical exposure and industry-relevant experience.",
+    },
+    {
+      id: "2",
+      icon: Eclipse,
+      title: "How can I customize my learning experience?",
+      content:
+        "Our structured modules cover diverse domains like web development, app development, AI/ML, and blockchain. Learners can choose specializations based on their interests and career goals.",
+    },
+    {
+      id: "3",
+      icon: Zap,
+      title: "Is the training practical and industry-focused?",
+      content:
+        "Absolutely! Each module integrates real-world project assignments, allowing learners to apply their skills in realistic scenarios and gain practical expertise.",
+    },
+    {
+      id: "4",
+      icon: AtSign,
+      title: "What certifications does Internify offer?",
+      content:
+        "Upon successful project completion, we provide industry-recognized certificates, validating your skills and enhancing your professional profile.",
+    },
+  ];
+  
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <>
+      <div className="h-screen w-screen flex flex-col text-center items-center justify-center align-center">
+      <h1 className="text-4xl font-bold tracking-tighter md:text-5xl lg:text-7xl">
+      <AuroraText>Internify</AuroraText> Group 
+      </h1>
+      <h1 className="text-2xl mt-2">Get full hands-on experience</h1>
+      <Button className="group h-auto gap-4 py-3 text-left mt-4" variant="outline">
+        <div className="space-y-1">
+          <h3>Get Started</h3>
+          <p className="whitespace-break-spaces font-normal text-muted-foreground">
+            Ready to upskill my career in tech
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <ChevronRight
+          className="opacity-60 transition-transform group-hover:translate-x-0.5"
+          size={16}
+          strokeWidth={2}
+          aria-hidden="true"
+        />
+      </Button>
+      <AnimatedGridPattern maxOpacity={0.2} numSquares={20} className="h-screen w-screen flex flex-col text-center items-center justify-center align-center">
+      </AnimatedGridPattern>
+      </div>
+      
+      <section className="h-screen w-screen flex lg:flex-row flex-col items-center justify-between align-center">
+        <div className="space-y-4 max-w-[800px] w-full lg:px-20 px-5 mt-10">
+          <h2 className="text-2xl font-bold">Why Internify?</h2>
+          <Accordion type="single" className="w-full" defaultValue="1">
+            {items.map((item) => (
+              <AccordionItem value={item.id} key={item.id} className="py-2">
+                <AccordionTrigger className="py-2 text-md leading-6 hover:no-underline">
+                  <span className="flex items-center gap-3">
+                    <item.icon
+                      size={16}
+                      strokeWidth={2}
+                      className="shrink-0 opacity-60"
+                      aria-hidden="true"
+                    />
+                    <span>{item.title}</span>
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="pb-2 ps-7 text-muted-foreground">
+                  {item.content}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+        <div className="h-screen lg:w-3/5 lg:py-0 mt-10">
+          <img src={img.src} className="object-cover h-full w-full object-[30%]" />
+        </div>
+      </section>
+    </>
   );
 }
