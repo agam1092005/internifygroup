@@ -4,6 +4,9 @@ import { AuroraText } from "../components/ui/aurora-text";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 import img from '/app/students.jpg';
+import EmailCard from "../components/animata/card/email-feature-card";
+import { WordRotate } from "../components/ui/word-rotate";
+import { CardStackDemo } from "../components/ui/stack-card";
 
 import {
   Accordion,
@@ -94,9 +97,23 @@ export default function Home() {
             ))}
           </Accordion>
         </div>
-        <div className="h-screen lg:w-3/5 lg:py-0 mt-10">
+        <div className="h-screen lg:w-3/5 lg:py-0">
           <img src={img.src} className="object-cover h-full w-full object-[30%]" />
         </div>
+      </section>
+      <section className="h-screen w-screen flex flex-col lg:flex-row justify-center items-center align-center lg:mt-0 mt-40">
+        <div className="h-full lg:w-1/2 w-full flex flex-col pt-40 lg:justify-start lg:items-start justify-center items-center align-center lg:px-4">
+          <h2 className="text-2xl font-bold">Last batch was</h2>
+          <WordRotate
+            className="text-4xl font-light italic text-black"
+            words={["Magical", "Superb", "Incredible", "Awesome"]}
+          />
+          <br />
+          <h2 className="text-2xl font-bold">4000+ registrations</h2>
+          <CardStackDemo></CardStackDemo>
+        </div>
+        <EmailCard>
+        </EmailCard>
       </section>
     </>
   );
