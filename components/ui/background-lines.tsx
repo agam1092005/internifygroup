@@ -31,7 +31,7 @@ const pathVariants = {
   initial: { strokeDashoffset: 800, strokeDasharray: "50 800" },
   animate: {
     strokeDashoffset: 0,
-    strokeDasharray: "20 800",
+    strokeDasharray: "50 1000",
     opacity: [0, 1, 1, 0],
   },
 };
@@ -104,7 +104,7 @@ const SVG = ({
         <motion.path
           d={path}
           stroke={colors[idx]}
-          strokeWidth="2.3"
+          strokeWidth="3"
           strokeLinecap="round"
           variants={pathVariants}
           initial="initial"
