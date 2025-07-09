@@ -59,8 +59,8 @@ const CARDS = [
     designation: "Blockchain Developer Trainee",
     content: (
       <p>
-        This training was a complete game-changer for me. The immersive modules{" "}
-        <Highlight>helped me gain confidence</Highlight> in blockchain development and pursue more challenging projects.
+        Training was a complete game-changer for me. The immersive modules{" "}
+        <Highlight>helped me gain confidence</Highlight> in blockchain development.
       </p>
     ),
   },
