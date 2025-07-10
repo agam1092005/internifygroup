@@ -36,7 +36,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(500).json({ error: data.message || 'Failed to create order' });
     }
     return res.status(200).json({ sessionToken: data.payment_session_id, orderId: data.order_id });
-  } catch (err: any) {
-    return res.status(500).json({ error: err.message || 'Internal server error' });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ error: errorMessage });
   }
 } 

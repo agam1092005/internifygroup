@@ -15,7 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const data = userSnap.data();
     return res.status(200).json({ purchasedCourses: data.purchasedCourses || [] });
-  } catch (err: any) {
-    return res.status(500).json({ error: err.message || 'Internal server error' });
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Internal server error';
+    return res.status(500).json({ error: errorMessage });
   }
 } 

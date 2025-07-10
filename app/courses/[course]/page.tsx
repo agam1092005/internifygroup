@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useEffect } from 'react';
 import { auth } from '../../../firebase';
+import type { User } from 'firebase/auth';
 
 const modules = [
   {
@@ -30,7 +31,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
   const courseId = params.course;
   const files = modules[0].files;
   const [selectedFileIdx, setSelectedFileIdx] = useState(0);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [purchased, setPurchased] = useState(false);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
@@ -67,11 +68,11 @@ export default function CoursePage({ params }: { params: { course: string } }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: 999, // TODO: dynamic price
-          userId: user.uid,
+          userId: user?.uid,
           courseId,
           courseName,
-          email: user.email,
-          phone: user.phoneNumber || '9999999999',
+          email: user?.email,
+          phone: user?.phoneNumber || '9999999999',
         }),
       });
       const data = await res.json();
@@ -88,18 +89,18 @@ export default function CoursePage({ params }: { params: { course: string } }) {
       }
 
       // 3. Open Cashfree payment modal
-      // @ts-ignore
+      // @ts-expect-error
       const cashfree = window.Cashfree;
       cashfree.checkout({
         paymentSessionId: data.sessionToken,
         redirectTarget: '_self',
-        onSuccess: async (paymentData: any) => {
+        onSuccess: async () => {
           // 4. On success, update Firestore
           await fetch('/api/payment-success', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              userId: user.uid,
+              userId: user?.uid,
               courseId,
               courseName,
               orderId: data.orderId,
@@ -114,8 +115,9 @@ export default function CoursePage({ params }: { params: { course: string } }) {
           setMessage('Payment failed or cancelled.');
         },
       });
-    } catch (err: any) {
-      setMessage(err.message || 'Payment error');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Payment error';
+      setMessage(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -182,7 +184,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
       <div className="w-80 bg-gray-100 border-l border-gray-200 p-6 flex flex-col">
         <h2 className="text-lg font-bold mb-4 text-black">Modules</h2>
         <div className="flex flex-col gap-4">
-          {modules.map((mod, idx) => (
+          {modules.map((mod) => (
             <div
               key={mod.name}
               className={`rounded p-4 flex flex-col border ${mod.unlocked ? "bg-white border-green-400" : "bg-gray-200 border-gray-300 opacity-60"}`}
