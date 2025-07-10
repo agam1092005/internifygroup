@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 if (e.key === 'Enter' || e.key === ' ') router.push(`/courses/${slugify(course.name)}`);
               }}
             >
-              <div className="w-full aspect-[2/1] rounded mb-3 overflow-hidden bg-gray-800">
+              <div className="w-full aspect-[2/1] rounded mb-3 overflow-hidden bg-gray-800 relative">
                 <Image src={course.image} alt={course.name + ' image'} className="w-full h-full object-cover" fill sizes="(max-width: 768px) 100vw, 50vw" />
               </div>
               <span className="font-semibold text-lg text-black mb-2">{course.name}</span>

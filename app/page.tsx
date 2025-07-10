@@ -180,7 +180,7 @@ export default function Home() {
             ))}
           </Accordion>
         </div>
-        <div className="h-screen lg:w-3/5 lg:py-0">
+        <div className="h-screen lg:w-3/5 lg:py-0 relative">
           <Image src={img.src} alt="Students" className="object-cover h-full w-full object-[30%]" fill sizes="100vw" />
         </div>
       </section>
