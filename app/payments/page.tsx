@@ -7,18 +7,18 @@ import { db, auth } from '../../firebase';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import img from '/app/card.svg';
+import Image from 'next/image';
 
-function getCookie(name: string) {
-  if (typeof document === 'undefined') return null;
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
-  return null;
-}
+type Payment = {
+  courseName?: string;
+  courseId?: string;
+  timestamp?: { seconds: number };
+  amount: number;
+};
 
 export default function PaymentsPage() {
   const router = useRouter();
-  const [transactions, setTransactions] = useState<any[]>([]);
+  const [transactions, setTransactions] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +30,15 @@ export default function PaymentsPage() {
       // Fetch transactions for this user
       const q = query(collection(db, 'transactions'), where('userId', '==', user.uid));
       const querySnapshot = await getDocs(q);
-      const txns = querySnapshot.docs.map(doc => doc.data());
+      const txns = querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          courseName: data.courseName ?? '',
+          courseId: data.courseId ?? '',
+          timestamp: data.timestamp,
+          amount: data.amount ?? 0,
+        } as Payment;
+      });
       setTransactions(txns);
       setLoading(false);
     });
@@ -66,7 +74,7 @@ export default function PaymentsPage() {
             <div>Loading...</div>
           ) : transactions.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12">
-              <img src={img.src} alt="No transactions" width={160} height={160} className="mb-10" />
+              <Image src={img.src} alt="No transactions" width={160} height={160} className="mb-10" />
               <div className="text-gray-500 text-lg font-medium ml-6">No transactions found.</div>
             </div>
           ) : (

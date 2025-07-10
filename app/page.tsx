@@ -6,7 +6,7 @@ import img from '/app/students.jpg';
 import EmailCard from "../components/animata/card/email-feature-card";
 import { WordRotate } from "../components/ui/word-rotate";
 import { CardStackDemo } from "../components/ui/stack-card";
-import { Navbar, NavBody, NavItems, NavbarLogo, NavbarButton, MobileNav, MobileNavHeader, MobileNavMenu, MobileNavToggle } from "@/components/ui/resizable-navbar";
+import { Navbar, NavBody, NavbarLogo, NavbarButton, MobileNav, MobileNavHeader, MobileNavMenu, MobileNavToggle } from "@/components/ui/resizable-navbar";
 import { BackgroundLines } from "@/components/ui/background-lines";
 
 import {
@@ -19,6 +19,7 @@ import { AtSign, Command, Eclipse, Zap } from "lucide-react";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from "motion/react";
+import Image from 'next/image';
 
 export default function Home() {
   const items = [
@@ -101,7 +102,7 @@ export default function Home() {
             <NavbarLogo />
             <MobileNavToggle isOpen={mobileMenuOpen} onClick={() => setMobileMenuOpen((v) => !v)} />
           </MobileNavHeader>
-          <MobileNavMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
+          <MobileNavMenu isOpen={mobileMenuOpen}>
             <div className="flex flex-col w-full gap-2 mt-4">
               <NavbarButton href="/login" variant="secondary" onClick={() => setMobileMenuOpen(false)}>Login</NavbarButton>
               <NavbarButton href="/signup" variant="primary" onClick={() => setMobileMenuOpen(false)}>Sign Up</NavbarButton>
@@ -137,7 +138,7 @@ export default function Home() {
       <section className="w-full py-20 bg-black text-white flex flex-col items-center justify-center px-5">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">What Makes Us Different?</h2>
         <p className="max-w-3xl text-lg md:text-xl mb-8 text-gray-300 text-center">
-          Unlike other platforms, we don't stop at teaching or testing. At InternifyGroup, your progress is your passport:
+          Unlike other platforms, we don&apos;t stop at teaching or testing. At InternifyGroup, your progress is your passport:
         </p>
         <ul className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
           <li className="bg-neutral-900 border border-neutral-800 rounded-lg p-5 md:p-6 shadow-lg min-w-[260px] md:min-w-[320px] md:max-w-[400px] w-full">
@@ -180,7 +181,7 @@ export default function Home() {
           </Accordion>
         </div>
         <div className="h-screen lg:w-3/5 lg:py-0">
-          <img src={img.src} alt="Students" className="object-cover h-full w-full object-[30%]" />
+          <Image src={img.src} alt="Students" className="object-cover h-full w-full object-[30%]" fill sizes="100vw" />
         </div>
       </section>
       <section className="h-screen w-screen flex flex-col lg:flex-row justify-center items-center align-center lg:mt-0 mt-40">

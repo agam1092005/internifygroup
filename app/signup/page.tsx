@@ -41,8 +41,8 @@ export default function SignupPage() {
       const token = await user.getIdToken();
       document.cookie = `token=${token}; path=/;`;
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.message || 'Signup failed');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Signup failed');
     } finally {
       setLoading(false);
     }

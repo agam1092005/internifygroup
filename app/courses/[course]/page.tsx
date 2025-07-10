@@ -89,7 +89,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
       }
 
       // 3. Open Cashfree payment modal
-      const cashfree = window.Cashfree;
+      const cashfree = window.Cashfree as any;
       cashfree.checkout({
         paymentSessionId: data.sessionToken,
         redirectTarget: '_self',
@@ -218,6 +218,6 @@ export default function CoursePage({ params }: { params: { course: string } }) {
 
 declare global {
   interface Window {
-    Cashfree?: any;
+    Cashfree?: unknown;
   }
 } 

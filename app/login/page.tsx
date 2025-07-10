@@ -20,8 +20,8 @@ export default function LoginPage() {
       const token = await userCredential.user.getIdToken();
       document.cookie = `token=${token}; path=/;`;
       router.push('/dashboard');
-    } catch (err: any) {
-      setError(err.message || 'Login failed');
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Login failed');
     } finally {
       setLoading(false);
     }
