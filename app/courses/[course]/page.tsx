@@ -89,7 +89,6 @@ export default function CoursePage({ params }: { params: { course: string } }) {
       }
 
       // 3. Open Cashfree payment modal
-      // @ts-expect-error
       const cashfree = window.Cashfree;
       cashfree.checkout({
         paymentSessionId: data.sessionToken,
@@ -215,4 +214,10 @@ export default function CoursePage({ params }: { params: { course: string } }) {
       </div>
     </div>
   );
+}
+
+declare global {
+  interface Window {
+    Cashfree?: any;
+  }
 } 

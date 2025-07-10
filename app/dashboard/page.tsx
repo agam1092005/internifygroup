@@ -2,6 +2,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar, NavBody, NavItems, NavbarLogo, NavbarButton } from "@/components/ui/resizable-navbar";
+import Image from 'next/image';
 
 function getCookie(name: string) {
   if (typeof document === 'undefined') return null;
@@ -118,7 +119,7 @@ export default function DashboardPage() {
               }}
             >
               <div className="w-full aspect-[2/1] rounded mb-3 overflow-hidden bg-gray-800">
-                <img src={course.image} alt={course.name + ' image'} className="w-full h-full object-cover" />
+                <Image src={course.image} alt={course.name + ' image'} className="w-full h-full object-cover" fill sizes="(max-width: 768px) 100vw, 50vw" />
               </div>
               <span className="font-semibold text-lg text-black mb-2">{course.name}</span>
               <div className="flex items-center mb-1">
