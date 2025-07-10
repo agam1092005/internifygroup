@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from "react";
+import { useEffect } from 'react';
+import { auth } from '../../../firebase';
 
 const modules = [
   {
@@ -25,8 +27,28 @@ const modules = [
 
 export default function CoursePage({ params }: { params: { course: string } }) {
   const courseName = params.course.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  const courseId = params.course;
   const files = modules[0].files;
   const [selectedFileIdx, setSelectedFileIdx] = useState(0);
+  const [user, setUser] = useState<any>(null);
+  const [purchased, setPurchased] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged(async (u) => {
+      setUser(u);
+      if (u) {
+        // Check if course is already purchased
+        const res = await fetch(`/api/user-courses?userId=${u.uid}`);
+        const data = await res.json();
+        if (data.purchasedCourses && data.purchasedCourses.includes(courseId)) {
+          setPurchased(true);
+        }
+      }
+    });
+    return () => unsub();
+  }, [courseId]);
 
   const handlePrev = () => {
     setSelectedFileIdx((idx) => (idx > 0 ? idx - 1 : idx));
@@ -35,12 +57,89 @@ export default function CoursePage({ params }: { params: { course: string } }) {
     setSelectedFileIdx((idx) => (idx < files.length - 1 ? idx + 1 : idx));
   };
 
+  const handlePayment = async () => {
+    setLoading(true);
+    setMessage('');
+    try {
+      // 1. Create order via backend
+      const res = await fetch('/api/cashfree-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: 999, // TODO: dynamic price
+          userId: user.uid,
+          courseId,
+          courseName,
+          email: user.email,
+          phone: user.phoneNumber || '9999999999',
+        }),
+      });
+      const data = await res.json();
+      if (!data.sessionToken) throw new Error(data.error || 'Failed to create order');
+
+      // 2. Load Cashfree SDK if not loaded
+      if (!window.Cashfree) {
+        await new Promise((resolve) => {
+          const script = document.createElement('script');
+          script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+          script.onload = resolve;
+          document.body.appendChild(script);
+        });
+      }
+
+      // 3. Open Cashfree payment modal
+      // @ts-ignore
+      const cashfree = window.Cashfree;
+      cashfree.checkout({
+        paymentSessionId: data.sessionToken,
+        redirectTarget: '_self',
+        onSuccess: async (paymentData: any) => {
+          // 4. On success, update Firestore
+          await fetch('/api/payment-success', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId: user.uid,
+              courseId,
+              courseName,
+              orderId: data.orderId,
+              amount: 999, // TODO: dynamic price
+              status: 'SUCCESS',
+            }),
+          });
+          setPurchased(true);
+          setMessage('Payment successful! Course unlocked.');
+        },
+        onFailure: () => {
+          setMessage('Payment failed or cancelled.');
+        },
+      });
+    } catch (err: any) {
+      setMessage(err.message || 'Payment error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-row w-full">
       {/* Main Content */}
       <div className="flex-1 p-8">
         <h1 className="text-3xl font-bold mb-6 text-black">{courseName}</h1>
         <div className="mb-8">
+          {/* Payment Button */}
+          {purchased ? (
+            <div className="mb-4 p-4 bg-green-100 text-green-800 rounded">You have already purchased this course.</div>
+          ) : (
+            <button
+              className="mb-4 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition disabled:opacity-50"
+              onClick={handlePayment}
+              disabled={loading || !user}
+            >
+              {loading ? 'Processing...' : 'Buy Course (₹999)'}
+            </button>
+          )}
+          {message && <div className="mb-4 text-center text-sm text-black">{message}</div>}
           <h2 className="text-xl font-semibold mb-2">Module Files</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {files.map((file, idx) => (

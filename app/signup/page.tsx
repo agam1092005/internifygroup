@@ -36,6 +36,7 @@ export default function SignupPage() {
         phone,
         email,
         uid: user.uid,
+        purchasedCourses: [], // Add this line
       });
       const token = await user.getIdToken();
       document.cookie = `token=${token}; path=/;`;
