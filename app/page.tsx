@@ -15,13 +15,16 @@ import img4 from './4.png';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
+interface Course {
+  id: string;
+  title?: string;
+  subtitle?: string;
+  // Add other fields as needed
+}
+
 export default function Home() {
   
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  const [rightHovered, setRightHovered] = useState<number | null>(null);
-  
-  const [courses, setCourses] = useState<any[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [coursesError, setCoursesError] = useState('');
 
@@ -34,12 +37,12 @@ export default function Home() {
       setCoursesError('');
       try {
         const querySnapshot = await getDocs(collection(db, 'courses'));
-        const fetchedCourses: any[] = [];
+        const fetchedCourses: Course[] = [];
         querySnapshot.forEach((doc) => {
           fetchedCourses.push({ id: doc.id, ...doc.data() });
         });
         setCourses(fetchedCourses);
-      } catch (err) {
+      } catch {
         setCoursesError('Failed to fetch courses.');
       } finally {
         setLoadingCourses(false);

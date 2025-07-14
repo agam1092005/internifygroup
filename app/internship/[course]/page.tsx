@@ -6,13 +6,22 @@ import { auth, db } from '../../../firebase';
 import type { User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+
+interface Course {
+  title?: string;
+  jd?: string;
+  discounted_price?: number;
+  price?: number;
+  subtitle?: string;
+  // Add other fields as needed
+}
 
 export default function CoursePage({ params }: { params: { course: string } }) {
   const courseId = params.course;
-  const [course, setCourse] = useState<any>(null);
+  const [course, setCourse] = useState<Course | null>(null);
   const [courseLoading, setCourseLoading] = useState(true);
   const [courseError, setCourseError] = useState('');
-  const [selectedFileIdx, setSelectedFileIdx] = useState(0);
   const [user, setUser] = useState<User | null>(null);
   const [purchased, setPurchased] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -31,7 +40,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
         } else {
           setCourseError('Course not found.');
         }
-      } catch (err) {
+      } catch {
         setCourseError('Failed to fetch course.');
       } finally {
         setCourseLoading(false);
@@ -77,83 +86,13 @@ export default function CoursePage({ params }: { params: { course: string } }) {
   }
   const token = getToken();
 
-  const handlePayment = async () => {
-    setLoading(true);
-    setMessage('');
-    try {
-      // 1. Create order via backend
-      const res = await fetch('/api/cashfree-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: 999, // TODO: dynamic price
-          userId: user?.uid,
-          courseId,
-          courseName,
-          email: user?.email,
-          phone: user?.phoneNumber || '9999999999',
-        }),
-      });
-      const data = await res.json();
-      if (!data.sessionToken) throw new Error(data.error || 'Failed to create order');
-
-      // 2. Load Cashfree SDK if not loaded
-      if (!window.Cashfree) {
-        await new Promise((resolve) => {
-          const script = document.createElement('script');
-          script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
-          script.onload = resolve;
-          document.body.appendChild(script);
-        });
-      }
-
-      // 3. Open Cashfree payment modal
-      interface CashfreeSDK {
-        checkout: (options: {
-          paymentSessionId: string;
-          redirectTarget: string;
-          onSuccess: () => void;
-          onFailure: () => void;
-        }) => void;
-      }
-      const cashfree = window.Cashfree as CashfreeSDK;
-      cashfree.checkout({
-        paymentSessionId: data.sessionToken,
-        redirectTarget: '_self',
-        onSuccess: async () => {
-          // 4. On success, update Firestore
-          await fetch('/api/payment-success', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              userId: user?.uid,
-              courseId,
-              courseName,
-              orderId: data.orderId,
-              amount: 999, // TODO: dynamic price
-              status: 'SUCCESS',
-            }),
-          });
-          setPurchased(true);
-          setMessage('Payment successful! Course unlocked.');
-        },
-        onFailure: () => {
-          setMessage('Payment failed or cancelled.');
-        },
-      });
-    } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Payment error';
-      setMessage(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Removed: const handlePayment = async () => { ... } (function is unused)
 
   if (courseLoading) return <div className="p-8 text-black">Loading internship...</div>;
   if (courseError) return <div className="p-8 text-red-600">{courseError}</div>;
 
   const jd = course?.jd || 'No job description available.';
-  const price = course?.discounted_price || course?.price || 999;
+  // Removed: const price = course?.discounted_price || course?.price || 999; (unused)
 
   return (
     <div style={{ fontFamily: 'Geist, Inter, Arial, Helvetica, sans-serif' }}>
@@ -162,7 +101,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
         <div className="bg-white border border-gray-200 rounded-xl shadow-sm w-full max-w-2xl mx-auto p-8 flex flex-col">
           {/* Restore image and actively hiring text at the top */}
           <div className="flex flex-col items-center mb-4">
-            <img src="/intern.svg" alt="Intern" className="w-32 h-32 mb-2" />
+            <Image src="/intern.svg" alt="Intern" width={128} height={128} className="w-32 h-32 mb-2" />
             <div className="text-lg font-semibold text-black">7 actively hiring partners are looking for</div>
           </div>
           <h1 className="text-2xl font-bold mb-2 text-black">{course?.title || courseId}</h1>
