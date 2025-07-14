@@ -1,9 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
-
 export default function ApplyOffer() {
-  const params = useParams();
   // TODO: Fetch course price and discounted_price from backend or context
   const price = 1999; // Placeholder
   const discounted_price = 999; // Placeholder

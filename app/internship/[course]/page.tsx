@@ -2,8 +2,7 @@
 
 import React, { useState } from "react";
 import { useEffect } from 'react';
-import { auth, db } from '../../../firebase';
-import type { User } from 'firebase/auth';
+import { auth } from '../../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';

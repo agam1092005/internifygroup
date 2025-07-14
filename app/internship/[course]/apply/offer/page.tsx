@@ -1,12 +1,8 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function ApplyOffer() {
-  const params = useParams();
-  const courseId = params.course;
   // TODO: Fetch course price and discounted_price from backend or context
   const price = 1999; // Placeholder
   const discounted_price = 999; // Placeholder
@@ -35,7 +31,7 @@ export default function ApplyOffer() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: discounted_price,
-          courseId,
+          courseId: 'course-123', // Placeholder, replace with actual courseId
           // Add user info if needed
         }),
       });
