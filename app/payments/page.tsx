@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { useRouter } from 'next/navigation';
 import { Navbar, NavBody, NavItems, NavbarLogo, NavbarButton } from "@/components/ui/resizable-navbar";
-import { db, auth } from '../../firebase';
+import { db, auth } from '../../firebase.js';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import img from '/app/card.svg';

@@ -1,4 +1,4 @@
-import { db } from '../../../firebase';
+import { db } from '../../../firebase.js';
 import { doc, updateDoc, arrayUnion, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { NextResponse } from 'next/server';
 
