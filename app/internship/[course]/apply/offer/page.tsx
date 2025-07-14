@@ -21,7 +21,6 @@ export default function ApplyOffer() {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const router = useRouter();
 
   function handleChange(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -54,7 +53,7 @@ export default function ApplyOffer() {
       }
 
       // Initialize the SDK and open checkout
-      const cashfree = (window.Cashfree as any)({ mode: 'production' }); // or 'sandbox' for testing
+      const cashfree = (window.Cashfree as { (options: { mode: string }): { checkout: (opts: { paymentSessionId: string; redirectTarget: string }) => void } })({ mode: 'production' }); // or 'sandbox' for testing
       cashfree.checkout({
         paymentSessionId: data.sessionToken,
         redirectTarget: '_self',

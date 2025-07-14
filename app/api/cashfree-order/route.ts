@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { amount, courseId, email, phone, userId } = await req.json();
+    const { amount, email, phone, userId } = await req.json();
 
     // Use server-side env vars (never expose secret to frontend)
     const appId = process.env.NEXT_PUBLIC_CASHFREE_APP_ID;
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
       sessionToken: data.payment_session_id,
       orderId: data.order_id,
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
   }
 } 

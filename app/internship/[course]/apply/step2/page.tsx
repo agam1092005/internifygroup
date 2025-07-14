@@ -8,16 +8,9 @@ export default function ApplyStep2() {
   const params = useParams();
   const courseId = params.course;
   const [form, setForm] = useState({ why: "", strengths: "", goals: "", challenge: "", available: "" });
-  const [resume, setResume] = useState<File | null>(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
-
-  function handleResume(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files && e.target.files[0]) {
-      setResume(e.target.files[0]);
-    }
   }
 
   function handleContinue(e: React.FormEvent) {
@@ -107,7 +100,6 @@ export default function ApplyStep2() {
             <input
               type="file"
               accept=".pdf,.doc,.docx"
-              onChange={handleResume}
               required
               className="w-full border-0 border-b border-gray-300 focus:ring-0 focus:border-black rounded-none px-0 py-2 text-lg mb-2 bg-white"
             />

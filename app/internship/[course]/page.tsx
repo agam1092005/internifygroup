@@ -22,10 +22,10 @@ export default function CoursePage({ params }: { params: { course: string } }) {
   const [course, setCourse] = useState<Course | null>(null);
   const [courseLoading, setCourseLoading] = useState(true);
   const [courseError, setCourseError] = useState('');
-  const [user, setUser] = useState<User | null>(null);
+  // Removed: const [user, setUser] = useState<User | null>(null);
   const [purchased, setPurchased] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  // Removed: const [loading, setLoading] = useState(false);
+  // Removed: const [message, setMessage] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
 
   useEffect(() => {
     const unsub = auth.onAuthStateChanged(async (u) => {
-      setUser(u);
+      // Removed: setUser(u);
       if (u) {
         // Check if course is already purchased
         const res = await fetch(`/api/user-courses?userId=${u.uid}`);
@@ -71,12 +71,12 @@ export default function CoursePage({ params }: { params: { course: string } }) {
 
   // Removed file navigation handlers (not needed)
 
-  const courseName = course?.title || courseId;
+  // Removed: const courseName = course?.title || courseId;
 
   // Helper to get JWT from localStorage or cookie
   function getToken() {
     if (typeof window === 'undefined') return null;
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token) return token;
     // Fallback to cookie
     const value = `; ${document.cookie}`;
@@ -119,9 +119,9 @@ export default function CoursePage({ params }: { params: { course: string } }) {
             <button
               className="mb-4 px-4 py-1.5 bg-black text-white rounded font-semibold text-sm w-28 self-start hover:bg-gray-900 transition disabled:opacity-50"
               onClick={() => router.push(`/internship/${courseId}/apply`)}
-              disabled={loading}
+              disabled={false} // Removed loading state
             >
-              {loading ? 'Processing...' : 'Apply'}
+              Apply
             </button>
           )}
           <div className="border-t border-gray-200 my-4"></div>
@@ -129,7 +129,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
           <div className="mb-4 text-gray-800 text-[15px] leading-relaxed whitespace-pre-line w-full">
             {jd}
           </div>
-          {message && <div className="mb-2 text-center text-sm text-black">{message}</div>}
+          {/* Removed: {message && <div className="mb-2 text-center text-sm text-black">{message}</div>} */}
         </div>
       </div>
     </div>
