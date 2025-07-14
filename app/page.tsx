@@ -2,114 +2,58 @@
 import { AuroraText } from "../components/ui/aurora-text";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
-import img from '/app/students.jpg';
-import EmailCard from "../components/animata/card/email-feature-card";
-import { WordRotate } from "../components/ui/word-rotate";
 import { CardStackDemo } from "../components/ui/stack-card";
-import { Navbar, NavBody, NavbarLogo, NavbarButton, MobileNav, MobileNavHeader, MobileNavMenu, MobileNavToggle } from "@/components/ui/resizable-navbar";
 import { BackgroundLines } from "@/components/ui/background-lines";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { AtSign, Command, Eclipse, Zap } from "lucide-react";
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { motion } from "motion/react";
+import { useEffect, useState, useRef } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import img1 from './1.png';
+import img2 from './2.png';
+import img3 from './3.png';
+import img4 from './4.png';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const items = [
-    {
-      id: "1",
-      icon: Command,
-      title: "What makes Internify unique?",
-      content:
-        "Internify focuses on hands-on industrial training in various software fields. We offer real-time projects after module completion, ensuring practical exposure and industry-relevant experience.",
-    },
-    {
-      id: "2",
-      icon: Eclipse,
-      title: "How can I customize my learning experience?",
-      content:
-        "Our structured modules cover diverse domains like web development, app development, AI/ML, and blockchain. Learners can choose specializations based on their interests and career goals.",
-    },
-    {
-      id: "3",
-      icon: Zap,
-      title: "Is the training practical and industry-focused?",
-      content:
-        "Absolutely! Each module integrates real-world project assignments, allowing learners to apply their skills in realistic scenarios and gain practical expertise.",
-    },
-    {
-      id: "4",
-      icon: AtSign,
-      title: "What certifications does Internify offer?",
-      content:
-        "Upon successful project completion, we provide industry-recognized certificates, validating your skills and enhancing your professional profile.",
-    },
-  ];
-  const router = useRouter();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   const [rightHovered, setRightHovered] = useState<number | null>(null);
   
+  const [courses, setCourses] = useState<any[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+  const [coursesError, setCoursesError] = useState('');
+
+  const positionsRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        router.replace('/dashboard');
+    async function fetchCourses() {
+      setLoadingCourses(true);
+      setCoursesError('');
+      try {
+        const querySnapshot = await getDocs(collection(db, 'courses'));
+        const fetchedCourses: any[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedCourses.push({ id: doc.id, ...doc.data() });
+        });
+        setCourses(fetchedCourses);
+      } catch (err) {
+        setCoursesError('Failed to fetch courses.');
+      } finally {
+        setLoadingCourses(false);
       }
     }
-  }, [router]);
+    fetchCourses();
+  }, []);
+  
+  useEffect(() => {
+    // No redirect or restriction for logged-in users
+  }, []);
   
   return (
     <>
-      <Navbar>
-        {/* Desktop Navbar */}
-        <NavBody>
-          <NavbarLogo />
-          <div className="ml-auto flex gap-2 relative">
-            {[{ name: "Login", link: "/login" }, { name: "Sign Up", link: "/signup" }].map((item, idx) => (
-              <a
-                key={item.name}
-                href={item.link}
-                onMouseEnter={() => setRightHovered(idx)}
-                onMouseLeave={() => setRightHovered(null)}
-                className="relative px-4 py-2 min-w-[90px] text-center text-neutral-600 dark:text-neutral-300 font-bold text-sm"
-                style={{ display: 'inline-block' }}
-              >
-                {rightHovered === idx && (
-                  <motion.div
-                    layoutId="hovered"
-                    className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
-                    style={{ zIndex: 1 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 60 }}
-                  />
-                )}
-                <span className="relative z-20">{item.name}</span>
-              </a>
-            ))}
-          </div>
-        </NavBody>
-        {/* Mobile Navbar */}
-        <MobileNav>
-          <MobileNavHeader>
-            <NavbarLogo />
-            <MobileNavToggle isOpen={mobileMenuOpen} onClick={() => setMobileMenuOpen((v) => !v)} />
-          </MobileNavHeader>
-          <MobileNavMenu isOpen={mobileMenuOpen}>
-            <div className="flex flex-col w-full gap-2 mt-4">
-              <NavbarButton href="/login" variant="secondary" onClick={() => setMobileMenuOpen(false)}>Login</NavbarButton>
-              <NavbarButton href="/signup" variant="primary" onClick={() => setMobileMenuOpen(false)}>Sign Up</NavbarButton>
-            </div>
-          </MobileNavMenu>
-        </MobileNav>
-      </Navbar>
       <div className="h-[75vh] md:h-screen w-screen flex flex-col text-center items-center justify-center align-center relative overflow-hidden">
         <BackgroundLines className="absolute inset-0 w-full h-full -z-10">{null}</BackgroundLines>
         <h1 className="text-4xl md:text-5xl lg:text-7xl font-extrabold tracking-tight mb-4">
@@ -118,7 +62,9 @@ export default function Home() {
         <h2 className="text-sm md:text-2xl font-semibold text-black mb-4">
           No fake certificate. Perform & land internship at MNC.
         </h2>
-        <Button className="group h-auto gap-4 py-3 text-left mt-4" variant="outline" onClick={() => router.push('/login')}>
+        <Button className="group h-auto gap-4 py-3 text-left mt-4" variant="outline" onClick={() => {
+          positionsRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }}>
           <div className="space-y-1">
             <h3>Get Started</h3>
             <p className="whitespace-break-spaces font-normal text-muted-foreground">
@@ -156,47 +102,62 @@ export default function Home() {
         </ul>
       </section>
 
-      <section className="h-screen w-screen flex lg:flex-row flex-col items-center justify-between align-center">
-        <div className="space-y-4 max-w-[800px] w-full lg:px-20 px-5 mt-10">
-          <h2 className="text-2xl font-bold">Why Internify?</h2>
-          <Accordion type="single" className="w-full" defaultValue="1">
-            {items.map((item) => (
-              <AccordionItem value={item.id} key={item.id} className="py-2">
-                <AccordionTrigger className="py-2 text-md leading-6 hover:no-underline">
-                  <span className="flex items-center gap-3">
-                    <item.icon
-                      size={16}
-                      strokeWidth={2}
-                      className="shrink-0 opacity-60"
-                      aria-hidden="true"
-                    />
-                    <span>{item.title}</span>
-                  </span>
-                </AccordionTrigger>
-                <AccordionContent className="pb-2 ps-7 text-muted-foreground">
-                  {item.content}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
+      {/* Removed FAQ (Accordion) and image section */}
+      {/* Testimonial & Internship Logos Section */}
+      <section className="w-screen flex flex-col lg:flex-row items-center justify-center gap-y-12 lg:gap-y-0 lg:gap-x-16 min-h-[350px] lg:min-h-[400px] bg-white">
+        {/* Left: Testimonial Cards */}
+        <div className="justify-center items-center lg:ml-40 mb-6">
+          <CardStackDemo />
         </div>
-        <div className="h-screen lg:w-3/5 lg:py-0 relative">
-          <Image src={img.src} alt="Students" className="object-cover h-full w-full object-[30%]" fill sizes="100vw" />
+        {/* Right: Internship Logos */}
+        <div className="flex flex-col justify-center items-center w-full lg:w-1/2 mt-4">
+          <h3 className="text-xl md:text-2xl font-semibold mb-6 text-gray-800 text-center">Our students interned at</h3>
+          <div className="grid grid-cols-2 gap-12">
+            <Image src={img1.src} alt="Company 1" width={120} height={120} className="object-contain h-24 w-24" />
+            <Image src={img2.src} alt="Company 2" width={120} height={120} className="object-contain h-24 w-24" />
+            <Image src={img3.src} alt="Company 3" width={120} height={120} className="object-contain h-24 w-24" />
+            <Image src={img4.src} alt="Company 4" width={120} height={120} className="object-contain h-24 w-24" />
+          </div>
         </div>
       </section>
-      <section className="h-screen w-screen flex flex-col lg:flex-row justify-center items-center align-center lg:mt-0 mt-40">
-        <div className="h-full lg:w-1/2 w-full flex flex-col pt-40 lg:justify-start lg:items-start justify-center items-center align-center lg:px-4">
-          <h2 className="text-2xl font-bold">Last batch was</h2>
-          <WordRotate
-            className="text-4xl font-light italic text-black"
-            words={["Magical", "Superb", "Incredible", "Awesome"]}
-          />
-          <br />
-          <h2 className="text-2xl font-bold">4000+ registrations</h2>
-          <CardStackDemo></CardStackDemo>
+
+      {/* Available Courses Section */}
+      <section ref={positionsRef} className="w-full py-20 bg-gray-50 flex flex-col items-center justify-center px-5">
+        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">Positions open</h2>
+        <div className="w-full max-w-2xl">
+          {loadingCourses ? (
+            <div className="text-center text-gray-600">Loading positions...</div>
+          ) : coursesError ? (
+            <div className="text-center text-red-600">{coursesError}</div>
+          ) : (
+            <ul className="divide-y divide-gray-200">
+              {courses.map((course) => (
+                <li
+                  key={course.id}
+                  className="flex items-center justify-between py-6 cursor-pointer hover:bg-gray-100 px-2 transition group"
+                  tabIndex={0}
+                  role="button"
+                  onClick={() => {
+                    router.push(`/internship/${course.id}`);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      router.push(`/internship/${course.id}`);
+                    }
+                  }}
+                >
+                  <div className="flex flex-col">
+                    <span className="font-bold text-lg text-black group-hover:underline">{course.title}</span>
+                    {course.subtitle && (
+                      <span className="text-gray-600 text-sm mt-1 max-w-xl line-clamp-2">{course.subtitle}</span>
+                    )}
+                  </div>
+                  <ChevronRight className="w-6 h-6 text-gray-400 group-hover:text-black transition" />
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
-        <EmailCard>
-        </EmailCard>
       </section>
     </>
   );

@@ -1,22 +1,23 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../firebase';
+import { db } from '../../../firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { userId } = req.query;
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get('userId');
   if (!userId || typeof userId !== 'string') {
-    return res.status(400).json({ error: 'Missing or invalid userId' });
+    return NextResponse.json({ error: 'Missing or invalid userId' }, { status: 400 });
   }
   try {
     const userRef = doc(db, 'users', userId);
     const userSnap = await getDoc(userRef);
     if (!userSnap.exists()) {
-      return res.status(404).json({ error: 'User not found' });
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
     const data = userSnap.data();
-    return res.status(200).json({ purchasedCourses: data.purchasedCourses || [] });
+    return NextResponse.json({ purchasedCourses: data.purchasedCourses || [] });
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Internal server error';
-    return res.status(500).json({ error: errorMessage });
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 } 
