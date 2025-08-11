@@ -176,7 +176,7 @@ export default function Home() {
             <div className="flex flex-col md:flex-row gap-6 md:gap-8 text-center md:text-left">
               {/* Contact Us */}
               <a 
-                href="mailto:agam1092005@gmail.com"
+                href="/contactus"
                 className="text-white hover:text-blue-400 transition-colors font-medium"
               >
                 Contact Us
