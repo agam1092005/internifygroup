@@ -5,7 +5,7 @@ import { auth } from '../../firebase.js';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useSearchParams } from 'next/navigation';
 
-function LoginForm() {
+function LoginFormWithParams() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -91,7 +91,7 @@ export default function LoginPage() {
         </div>
       </div>
     }>
-      <LoginForm />
+      <LoginFormWithParams />
     </Suspense>
   );
 } 
