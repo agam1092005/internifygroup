@@ -162,6 +162,49 @@ export default function Home() {
           )}
         </div>
       </section>
+
+      {/* Footer Section */}
+      <footer className="w-full py-12 bg-gray-900 text-white">
+        <div className="max-w-6xl mx-auto px-5">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            {/* Copyright */}
+            <div className="text-gray-400 text-sm">
+              © 2025 Internify. All rights reserved.
+            </div>
+            
+            {/* Footer Links */}
+            <div className="flex flex-col md:flex-row gap-6 md:gap-8 text-center md:text-left">
+              {/* Contact Us */}
+              <a 
+                href="mailto:agam1092005@gmail.com"
+                className="text-white hover:text-blue-400 transition-colors font-medium"
+              >
+                Contact Us
+              </a>
+              
+              {/* Terms & Conditions */}
+              <a 
+                href="/tnc.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-blue-400 transition-colors font-medium"
+              >
+                Terms & Conditions
+              </a>
+              
+              {/* Refund Policy */}
+              <a 
+                href="/refundPolicy.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white hover:text-blue-400 transition-colors font-medium"
+              >
+                Refund Policy
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </>
   );
 }
