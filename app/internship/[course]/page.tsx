@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { useEffect } from 'react';
-import { auth } from '../../../firebase.js';
+import { auth, db } from '../../../firebase.js';
 import { doc, getDoc } from 'firebase/firestore';
+import { User } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
@@ -49,7 +50,7 @@ export default function CoursePage({ params }: { params: { course: string } }) {
   }, [courseId]);
 
   useEffect(() => {
-    const unsub = auth.onAuthStateChanged(async (u) => {
+    const unsub = auth.onAuthStateChanged(async (u: User | null) => {
       // Removed: setUser(u);
       if (u) {
         // Check if course is already purchased
