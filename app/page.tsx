@@ -63,7 +63,7 @@ export default function Home() {
           <AuroraText>Learn. Excel. Get Hired.</AuroraText>
         </h1>
         <h2 className="text-sm md:text-2xl font-semibold text-black mb-4">
-          No fake certificate. Perform & land internship at MNC.
+          Apply for IT internships and training programs <br /> to boost your career growth with expert mentorship.
         </h2>
         <Button className="group h-auto gap-4 py-3 text-left mt-4" variant="outline" onClick={() => {
           positionsRef.current?.scrollIntoView({ behavior: 'smooth' });
