@@ -6,7 +6,7 @@ import { Navbar, NavBody, NavItems, NavbarLogo, NavbarButton } from "@/component
 import { db, auth } from '../../firebase.js';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import img from '/app/card.svg';
+import img from '../card.svg';
 import Image from 'next/image';
 
 type Payment = {
